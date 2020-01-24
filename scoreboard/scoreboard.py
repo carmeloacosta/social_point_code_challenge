@@ -99,7 +99,8 @@ class ScoreBoard():
 
             IMPLEMENTATION NOTE: If more than one clients are tied in a given position the returned list considers them
                 as a single ranking position.
-                Example: ({"user": 123, "total": 100}, {"user": 456, "total": 200}, {"user": 789, "total": 100})
+
+                Example: [{"user": 123, "total": 100}, {"user": 456, "total": 200}, {"user": 789, "total": 100}]
 
                     The top-2 (i.e., top_size = 2) is:
 
@@ -121,3 +122,87 @@ class ScoreBoard():
 
         return result
 
+    def relative_top(self, ranking_position, scope_size):
+        """
+            Returns the clients in the specified scope around the one that occupy the specified ranking position of
+                top ranking positions (i.e., those with the higher score values), according to the absolute ranking.
+                The scope around a given ranking position is defined as the clients that occupy the scope_size ranking
+                positions before the client that occupies the specified ranking position, followed by the scope_size
+                ranking positions before the client that occupies the specified ranking position.
+
+                Example:
+
+                [{"user": 1, "total": 150}, {"user": 2, "total": 200}, {"user": 3, "total": 100},
+                 {"user": 4, "total": 300}, {"user": 5, "total": 120}, {"user": 6, "total": 90}]
+
+                The relative_top(ranking_position=3, scope_size=2) is the following:
+
+                [{"user": 4, "total": 300}
+                 {"user": 2, "total": 200},
+                 {"user": 1, "total": 150},
+                 {"user": 5, "total": 120},
+                 {"user": 3, "total": 100}
+                ]
+
+                Since the 3rd ranking position is occupied by {"user": 1, "total": 150}, the full requested positions
+                are: 1st, 2nd, 3rd, 4th, and 5th (i.e., from (ranking_position - scope_size) to
+                (ranking_position + scope_size)
+
+            IMPLEMENTATION NOTE: If more than one clients are tied in a given position the returned list considers them
+                as a single ranking position. (same as with top but for relative ranking)
+
+        :param ranking_position: (int) Ranking position to retrieve scope around. Must be a positive value, from 1 to N.
+        :param scope_size: (int) Scope size (see explanation above). Must be a positive value.
+        :return: (list of Client) The clients that occupies the specified ranking positions.
+        """
+        result = []
+
+        if ranking_position >= 1 and scope_size >= 0:
+
+            try:
+                top_positions = self.sorted_clients.nlargest(len(self.sorted_clients))
+
+                if (ranking_position - scope_size > 1) and (ranking_position - scope_size < len(self.sorted_clients)):
+                    #
+                    # Not truncated on the left (high scores)
+                    #
+                    if ranking_position + scope_size <= len(self.sorted_clients):
+                        #
+                        #  Full range exists
+                        #
+
+                        top_positions = top_positions[ranking_position - scope_size - 1: ranking_position + scope_size]
+
+                    else:
+                        #
+                        # Range truncated on the right (not enough low scores)
+                        #
+
+                        top_positions = top_positions[ranking_position - scope_size - 1: len(top_positions)]
+
+                elif ranking_position - scope_size < 1:
+                    #
+                    # Range truncated on the left (not enough high scores)
+                    #
+                    if ranking_position + scope_size <= len(self.sorted_clients):
+                        #
+                        #  Only truncated on the left (enough low scores)
+                        #
+
+                        top_positions = top_positions[0: ranking_position + scope_size]
+
+                    else:
+                        #
+                        # Range truncated both on the left and on the right (not enough neither low nor high scores)
+                        #
+                        # That is, all the positions.
+                        #
+                        pass
+
+                for position in top_positions:
+                    result.extend(position[1])
+
+            except TypeError:
+                pass
+
+        return result
