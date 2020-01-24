@@ -19,24 +19,6 @@ class Client():
     def __repr__(self):
         return "(id: {}, score: {})".format(self.id, self.score)
 
-    def update(self, modification):
-        """
-            Updates the client score according to the specified modification, that could be :
-
-                    * An absolute (aka total) score modification.
-                    * A relative socre modification.
-
-            See the expected modification format in self.total and self.relative method.
-
-        :param modification:
-        :return: (bool) True if the modification was successfully applied. False otherwise.
-        """
-        result = True
-
-        if not self.total(modification):
-            result = self.relative(modification)
-        return result
-
     def total(self, score):
         """
             Modifies the client total score
@@ -72,8 +54,8 @@ class Client():
 
         :return: (bool) True if the modification was successfully applied. False otherwise.
         """
-        result = False
-
+        result = True
+        #import ipdb; ipdb.set_trace()  # DEBUGGING
         try:
             operator = modification[0]
             value = int(modification[1:])
@@ -85,10 +67,13 @@ class Client():
             elif operator == '-':
                 # DECREASE
                 self.score -= value
+            else:
+                # UNKNOWN OPERATION
+                result = False
 
         except (IndexError, ValueError):
             # Invalid modification
-            pass
+            result = False
 
         return result
 

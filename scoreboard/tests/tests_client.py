@@ -40,7 +40,7 @@ class TestClient(unittest.TestCase):
 
         client_id = 985
         # (<relative_score>, <total_score>)
-        relative_list = [("+10", 10), ("-100", -90), ("+150", 60), ("-75", -15), ("+225", 215)]
+        relative_list = [("+10", 10), ("-100", -90), ("+150", 60), ("-75", -15), ("+225", 210)]
 
         # Test main
         client = Client(client_id)
@@ -54,7 +54,7 @@ class TestClient(unittest.TestCase):
             self.assertEqual(client.id, client_id)
             self.assertEqual(client.score, new_total)
 
-    def test_client_relative_ok(self):
+    def test_client_relative_wrong(self):
 
         client_id = 984
         relative_list = ["10", "-", "+", "+1xaY50", "*75", ]
@@ -69,7 +69,7 @@ class TestClient(unittest.TestCase):
             # Check results
             self.assertEqual(success, False)
 
-    def test_client_sorting_ok(self):
+    def test_client_total_sorting_ok(self):
 
         client_id_list = [1, 2, 3, 4, 5, 6]
         client_score_list = [100, 200, 150, 350, 225, 155]
