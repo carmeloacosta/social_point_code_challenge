@@ -1,7 +1,6 @@
 import os
 import unittest
 from json import dumps, loads
-from unittest.mock import MagicMock
 from multiprocessing import Process
 
 os.path.dirname(os.path.realpath(__file__))

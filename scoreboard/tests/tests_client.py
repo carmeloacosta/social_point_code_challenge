@@ -91,5 +91,3 @@ class TestClient(unittest.TestCase):
 
         for ptr in range(len(sorted_client_list)):
             self.assertEqual(sorted_client_list[ptr].id, expected_sorted_id_list[ptr])
-
-

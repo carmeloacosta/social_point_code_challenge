@@ -1,5 +1,4 @@
 import os
-import sys
 import unittest
 from multiprocessing import Process
 os.path.dirname(os.path.realpath(__file__))
@@ -27,18 +26,9 @@ class TestScoreboardWrapper(unittest.TestCase):
         cls.client = ScoreboardWrapper()
         cls.client.start(CLIENT_MODE)
 
-        # Get rid of deprecation message from pizco
-        #cls._stderr = sys.stderr
-        #cls._stdout = sys.stdout
-        #cls.devnull = open(os.devnull, 'wb')
-        #sys.stderr = sys.stdout = cls.devnull
-
     @classmethod
     def tearDownClass(cls):
         cls.server.terminate()
-        #sys.stderr = cls._stderr
-        #sys.stderr = cls._stdout
-        #cls.devnull.close()
 
     def setUp(self):
         self.client.reset()
@@ -68,8 +58,6 @@ class TestScoreboardWrapper(unittest.TestCase):
 
     def test_update_ok(self):
 
-        #client = ScoreboardWrapper()
-        #self.client.start(CLIENT_MODE)
         client_info = {"user": 123, "total": 250}
 
         # Test main
@@ -87,9 +75,6 @@ class TestScoreboardWrapper(unittest.TestCase):
                       {"user": client_id, "total": 75},
                       {"user": client_id, "total": 225}
                       ]
-
-        #client = ScoreboardWrapper()
-        #self.client.start(CLIENT_MODE)
 
         # Test main
         for new_total in total_list:
@@ -112,9 +97,6 @@ class TestScoreboardWrapper(unittest.TestCase):
 
         self.assertEqual(len(relative_list), len(expected_total))
 
-        #client = ScoreboardWrapper()
-        #self.client.start(CLIENT_MODE)
-
         # Test main
         for ptr, new_relative in enumerate(relative_list):
             result = self.client.update(new_relative)
@@ -133,9 +115,6 @@ class TestScoreboardWrapper(unittest.TestCase):
                          {"user": client_id, "score": "*75"}
                          ]
 
-        #client = ScoreboardWrapper()
-        #self.client.start(CLIENT_MODE)
-
         # Test main
         for new_relative in relative_list:
             result = self.client.update(new_relative)
@@ -149,9 +128,6 @@ class TestScoreboardWrapper(unittest.TestCase):
         expected_sorted_id_list = [4, 5, 2, 6, 3, 1]
         self.assertEqual(len(client_id_list), len(client_score_list))
         self.assertEqual(len(client_score_list), len(expected_sorted_id_list))
-
-        #client = ScoreboardWrapper()
-        #self.client.start(CLIENT_MODE)
 
         for ptr in range(len(client_id_list)):
             self.client.update({"user": client_id_list[ptr], "total": client_score_list[ptr]})
@@ -172,9 +148,6 @@ class TestScoreboardWrapper(unittest.TestCase):
         expected_sorted_id_list = [8, 4, 5, 2, 9, 6, 3, 1, 7, 10]
         self.assertEqual(len(client_id_list), len(client_score_list))
         self.assertEqual(len(client_score_list), len(expected_sorted_id_list))
-
-        #client = ScoreboardWrapper()
-        #self.client.start(CLIENT_MODE)
 
         for ptr in range(len(client_id_list)):
             self.client.update({"user": client_id_list[ptr], "total": client_score_list[ptr]})
@@ -234,9 +207,6 @@ class TestScoreboardWrapper(unittest.TestCase):
                     position_ptr_list.append(ptr)
 
             self.assertEqual(len(position_ptr_list), expected_result_size)
-
-            #client = ScoreboardWrapper()
-            #self.client.start(CLIENT_MODE)
 
             for ptr in range(len(client_id_list)):
                 self.client.update({"user": client_id_list[ptr], "total": client_score_list[ptr]})
