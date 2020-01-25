@@ -14,6 +14,13 @@ logger = logging.getLogger(__name__)
 
 from json import dumps, loads
 
+import os
+os.path.dirname(os.path.realpath(__file__))
+path = os.path.dirname(os.path.realpath(__file__))
+os.environ['PATH'] += ':'+path
+
+from constants import DEBUG
+
 
 # Define API on Flask app
 @app.route("/score", methods=["PUT"])
@@ -40,6 +47,16 @@ def relative_top(ranking_position, scope_size):
         response = app.scoreboard.relative_top(ranking_position, scope_size)
         return dumps(response)
 
+
+#
+# Just for DEBUG
+#
+@app.route("/reset", methods=["DELETE"])
+def reset():
+    if DEBUG and request.method == "DELETE":
+        app.scoreboard.reset()
+
+    return ""
 
 def get_api(scoreboard_wrapper):
     """

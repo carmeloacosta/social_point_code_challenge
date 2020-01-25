@@ -5,6 +5,11 @@
 """
 
 #
+# Change this to False for production code
+#
+DEBUG = True
+
+#
 # SCOREBOARD WRAPPER CONFIGURATION
 #
 DEFAULT_IP = "127.0.0.1"
