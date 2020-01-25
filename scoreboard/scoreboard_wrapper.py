@@ -7,6 +7,10 @@
 from json import dumps, loads
 from pizco import Proxy, Server
 
+# Add logger
+import logging
+logger = logging.getLogger(__name__)
+
 from scoreboard import Scoreboard
 from constants import DEFAULT_IP, DEFAULT_PORT, CLIENT_MODE, SERVER_MODE
 
@@ -52,9 +56,10 @@ class ScoreboardWrapper():
 
     """
 
-    def __init__(self, port=DEFAULT_PORT, ip=DEFAULT_IP):
+    def __init__(self, port=DEFAULT_PORT, ip=DEFAULT_IP, elogger=logger):
         self.ip = ip
         self.port = port
+        self.logger = elogger
         self.mode = None
         self.instance = None  # Server or Proxy, according to mode
         self.scoreboard = None  # The in-memory scoreboard (only in the server)
@@ -118,12 +123,14 @@ class ScoreboardWrapper():
 
         if mode == CLIENT_MODE:
             self.mode = mode
+            self.logger.info("Starting Scoreboard Client listening on {}:{} ...".format(self.ip, self.port))
             self.instance = Proxy(address)
 
         elif mode == SERVER_MODE:
             self.mode = mode
             self.scoreboard = Scoreboard()
             server = Server(self, address)
+            self.logger.info("Starting Scoreboard Server listening on {}:{} ...".format(self.ip, self.port))
             server.serve_forever()
 
     def reset(self):
@@ -135,9 +142,11 @@ class ScoreboardWrapper():
         """
         if self.mode == SERVER_MODE:
             self.scoreboard.reset()
+            self.logger.debug("Server Scoreboard reset")
 
         elif self.mode == CLIENT_MODE:
             self.instance.reset()
+            self.logger.debug("Client Scoreboard reset (sent to server)")
 
     def update(self, client_info):
         """
@@ -165,10 +174,12 @@ class ScoreboardWrapper():
             self.scoreboard.update(client_info)
             client = self.scoreboard.get(client_info["user"])
             result = {"user": client.id, "total": client.score}
+            self.logger.debug("Server Scoreboard updated : {}".format(result))
             result = dumps(result)
 
         elif self.mode == CLIENT_MODE and self.is_valid_info(client_info):
             result = self.instance.update(dumps(client_info))
+            self.logger.debug("Client Scoreboard obtained update response from server : {}".format(result))
             result = loads(result)
 
         else:
@@ -192,10 +203,12 @@ class ScoreboardWrapper():
             serial_result = []
             for client in result:
                 serial_result.append(client.to_json())
+            self.logger.debug("Server Scoreboard top ({}) : {}".format(top_size, result))
             result = dumps(serial_result)
 
         elif self.mode == CLIENT_MODE and isinstance(top_size, int):
             result = self.instance.top(str(top_size))
+            self.logger.debug("Client Scoreboard top ({}) : {}".format(top_size, result))
             result = loads(result)
 
         else:
@@ -219,10 +232,14 @@ class ScoreboardWrapper():
             serial_result = []
             for client in result:
                 serial_result.append(client.to_json())
+            self.logger.debug("Server Scoreboard relative top ({}, {}) : {}".format(ranking_position, scope_size,
+                                                                                    result))
             result = dumps(serial_result)
 
         elif self.mode == CLIENT_MODE and isinstance(ranking_position, int) and isinstance(scope_size, int):
             result = self.instance.relative_top(str(ranking_position), str(scope_size))
+            self.logger.debug("Client Scoreboard relative top ({}, {}) : {}".format(ranking_position, scope_size,
+                                                                                    result))
             result = loads(result)
 
         else:
