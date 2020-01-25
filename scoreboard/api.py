@@ -58,6 +58,7 @@ def reset():
 
     return ""
 
+
 def get_api(scoreboard_wrapper):
     """
         Returns an initialized HTTP RESTful API

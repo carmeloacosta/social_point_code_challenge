@@ -25,9 +25,7 @@ class TestApi(unittest.TestCase):
         self.scoreboard_wrapper.update = MagicMock(return_value=client_msg)
 
         # Test main
-        response = self.client.put('/score',
-                                 data=dumps(client_msg),
-                                 content_type='application/json')
+        response = self.client.put('/score', data=dumps(client_msg), content_type='application/json')
 
         # Check results
         body = response.data.decode('utf8')

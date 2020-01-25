@@ -34,7 +34,8 @@ def start_scoreboard_server(port=DEFAULT_PORT, ip=DEFAULT_IP, debug_mode=True):
         return server
 
 
-def start_scoreboard_client(port=DEFAULT_PORT, ip=DEFAULT_IP, debug_mode=True):
+def start_scoreboard_client(api_port=DEFAULT_PORT, api_ip=DEFAULT_IP, server_port=DEFAULT_PORT+1,
+                            server_ip=DEFAULT_IP, debug_mode=True):
     """
         Starts an wrapped Scoreboard acting as a client, connected with an HTTP API and with the server.
 
@@ -46,13 +47,15 @@ def start_scoreboard_client(port=DEFAULT_PORT, ip=DEFAULT_IP, debug_mode=True):
     :param debug_mode:
     :return:
     """
-    #print("\n\n\n[APP][start_scoreboard_client] port={}, ip={}, debug_mode={}".format(port, ip, debug_mode))  # DEBUGGING
-    client = ScoreboardWrapper(port, ip)
+    print("\n\n\n[APP][start_scoreboard_client] api_port={}, api_ip={}, server_port={}, server_ip={}, debug_mode={}"
+          "".format(api_port, api_ip, server_port, server_ip, debug_mode))  # DEBUGGING
+    client = ScoreboardWrapper(server_port, server_ip)
     client.start(CLIENT_MODE)
 
     api = get_api(client)
 
     if not debug_mode:
-         api.run(host=ip, port=port)
+        print("Starting API in {}:{}".format(api_ip, api_port)) #DEBUGGING
+        api.run(host=api_ip, port=api_port)
     else:
-         return api
+        return api

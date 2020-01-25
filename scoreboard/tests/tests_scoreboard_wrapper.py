@@ -10,7 +10,7 @@ from scoreboard_wrapper import ScoreboardWrapper
 from constants import DEFAULT_IP, DEFAULT_PORT, CLIENT_MODE, SERVER_MODE
 
 
-def start_server(port):
+def start_server():
     server = ScoreboardWrapper()
     server.start(SERVER_MODE)
 
@@ -20,7 +20,7 @@ class TestScoreboardWrapper(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # Setup server
-        cls.server = Process(target=start_server, args=(DEFAULT_PORT, ))
+        cls.server = Process(target=start_server)
         cls.server.start()
 
         cls.client = ScoreboardWrapper()

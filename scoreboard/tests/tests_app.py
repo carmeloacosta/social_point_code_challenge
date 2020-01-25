@@ -25,7 +25,7 @@ class TestApp(unittest.TestCase):
         #
         # Setup a client in DEBUG_MODE
         #
-        cls.client_app = start_scoreboard_client(DEFAULT_PORT, DEFAULT_IP, DEBUG_MODE)
+        cls.client_app = start_scoreboard_client(DEFAULT_PORT, DEFAULT_IP, DEFAULT_PORT, DEFAULT_IP, DEBUG_MODE)
 
     @classmethod
     def tearDownClass(cls):
