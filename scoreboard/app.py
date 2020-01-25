@@ -20,12 +20,11 @@ def start_scoreboard_server(port=DEFAULT_PORT, ip=DEFAULT_IP, debug_mode=True):
 
         If debug_mode returns an initialized, but not started, wrapped Scoreboard acting as a server.
 
-    :param port:
-    :param ip:
-    :param debug_mode:
-    :return:
+    :param port: (int) The port to use to communicate with the clients.
+    :param ip: (str) The IPv4 address to use to communicate with the clients.
+    :param debug_mode: (bool) True if in debug mode. False otherwise.
+    :return: (None/ScoreboardWrapper) According to debug_mode.
     """
-    #print("\n\n\n[APP][start_scoreboard_server] port={}, ip={}, debug_mode={}".format(port, ip, debug_mode)) #DEBUGGING
     server = ScoreboardWrapper(port, ip)
 
     if not debug_mode:
@@ -42,13 +41,14 @@ def start_scoreboard_client(api_port=DEFAULT_PORT, api_ip=DEFAULT_IP, server_por
         If debug_mode returns an initialized HTTP API, but not started, connected with the wrapped Scoreboard acting
             as a client.
 
-    :param port:
-    :param ip:
-    :param debug_mode:
-    :return:
+    :param api_port: (int) The port to use to expose the HTTP REST API.
+    :param api_ip: (str) The IPv4 address to expose the HTTP REST API.
+    :param server_port: (int) The port to use to communicate with the clients.
+    :param server_ip: (str) The IPv4 address to use to communicate with the clients.
+    :param debug_mode: (bool) True if in debug mode. False otherwise.
+    :return: (None/Flask) According to debug_mode.
+
     """
-    print("\n\n\n[APP][start_scoreboard_client] api_port={}, api_ip={}, server_port={}, server_ip={}, debug_mode={}"
-          "".format(api_port, api_ip, server_port, server_ip, debug_mode))  # DEBUGGING
     client = ScoreboardWrapper(server_port, server_ip)
     client.start(CLIENT_MODE)
 

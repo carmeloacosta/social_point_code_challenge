@@ -38,8 +38,8 @@ def main():
     signal.signal(signal.SIGTERM, handler_stop_signals)
 
     initial_port = server_port = DEFAULT_PORT + NUM_CLIENTS
+
     print("Starting SCOREBOARD with {} clients, starting at {}:{} ...".format(NUM_CLIENTS, DEFAULT_IP, DEFAULT_PORT))
-    #import ipdb; ipdb.set_trace()  # DEBUGGING
     server_app = Process(target=start_scoreboard_server, args=(server_port, DEFAULT_IP, DEBUG))
     server_app.start()
     process_list.append(server_app)
@@ -53,7 +53,7 @@ def main():
 
     # LAUNCH LAST CLIENT IN THIS PROCESS
     initial_port -= 1
-    print("Listening ...\n")
+
     start_scoreboard_client(initial_port, "192.168.99.1", server_port, DEFAULT_IP, DEBUG)
 
 

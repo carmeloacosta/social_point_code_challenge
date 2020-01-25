@@ -118,14 +118,10 @@ class ScoreboardWrapper():
 
         if mode == CLIENT_MODE:
             self.mode = mode
-            #print("[ScoreboardWrapper][start][{}] address: {}".format("SERVER_MODE" if mode == SERVER_MODE else
-            #                                                          "CLIENT_MODE", address))  # DEBUGGING
             self.instance = Proxy(address)
 
         elif mode == SERVER_MODE:
             self.mode = mode
-            #print("[ScoreboardWrapper][start][{}] address: {}".format("SERVER_MODE" if mode == SERVER_MODE else
-            #                                                          "CLIENT_MODE", address)) #DEBUGGING
             self.scoreboard = Scoreboard()
             server = Server(self, address)
             server.serve_forever()
@@ -190,7 +186,6 @@ class ScoreboardWrapper():
         """
         if self.mode == SERVER_MODE:
             result = self.scoreboard.top(int(top_size))
-            #print("\n\nSERVER.TOP[1]  top_size: {} , result: {}".format(top_size, result))
 
             # Serialize to stringified JSON to be sent to the client
             # From list of tuples to list of dicts
@@ -198,7 +193,6 @@ class ScoreboardWrapper():
             for client in result:
                 serial_result.append(client.to_json())
             result = dumps(serial_result)
-            #print("\n\nSERVER.TOP[2]  top_size: {} , result: {}".format(top_size, result))
 
         elif self.mode == CLIENT_MODE and isinstance(top_size, int):
             result = self.instance.top(str(top_size))
@@ -219,8 +213,6 @@ class ScoreboardWrapper():
         """
         if self.mode == SERVER_MODE:
             result = self.scoreboard.relative_top(int(ranking_position), int(scope_size))
-            #print("\n\nSERVER.RELATIVE_TOP[1]  ranking_position: {} , scope_size: {} ,result: {}".format(ranking_position,
-            #                                                                                    scope_size, result))
 
             # Serialize to stringified JSON to be sent to the client
             # From list of tuples to list of dicts
@@ -228,8 +220,6 @@ class ScoreboardWrapper():
             for client in result:
                 serial_result.append(client.to_json())
             result = dumps(serial_result)
-            #print("\n\nSERVER.RELATIVE_TOP[2]  ranking_position: {} , scope_size: {} ,result: {}".format(ranking_position,
-            #                                                                                    scope_size, result))
 
         elif self.mode == CLIENT_MODE and isinstance(ranking_position, int) and isinstance(scope_size, int):
             result = self.instance.relative_top(str(ranking_position), str(scope_size))

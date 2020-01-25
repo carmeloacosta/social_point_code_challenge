@@ -27,7 +27,6 @@ from constants import DEBUG
 def score():
     if request.method == "PUT":
         user_msg = loads(request.data.decode())
-        #print("[/score] user_msg: {}".format(user_msg)) #DEBUGGING
         response = app.scoreboard.update(user_msg)
         return dumps(response)
 
@@ -35,7 +34,6 @@ def score():
 @app.route("/top/<int:top_size>", methods=["GET"])
 def top(top_size):
     if request.method == "GET":
-        #print("[/top/{}] ".format(top_size)) #DEBUGGING
         response = app.scoreboard.top(top_size)
         return dumps(response)
 
@@ -43,7 +41,6 @@ def top(top_size):
 @app.route("/top/<int:ranking_position>/<int:scope_size>", methods=["GET"])
 def relative_top(ranking_position, scope_size):
     if request.method == "GET":
-        #print("[/top/{}/{}] ".format(ranking_position, scope_size)) #DEBUGGING
         response = app.scoreboard.relative_top(ranking_position, scope_size)
         return dumps(response)
 

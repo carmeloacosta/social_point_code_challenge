@@ -4,7 +4,6 @@
     Scoreboard module. Contains all information regarding with a scoreboard that keeps the ranking of all clients
 """
 
-from json import loads
 from bintrees import FastAVLTree
 
 import os
@@ -59,7 +58,6 @@ class Scoreboard():
         except KeyError:
             result = None
 
-        #print("\n\n\n SERVER GETTING: {}".format(result))  # DEBUGGING
         return result
 
     def update(self, client_info):
@@ -76,7 +74,6 @@ class Scoreboard():
 
         :return: (bool) True if successfully updated; False otherwise.
         """
-        #import ipdb; ipdb.set_trace() #DEBUGGING
         try:
             #
             # Handle first report/old sorting order
@@ -120,7 +117,6 @@ class Scoreboard():
             # Invalid client_info
             result = False
 
-        #print("\n\n\n SERVER UPDATE RESULT: {}".format(result))  # DEBUGGING
         return result
 
     def top(self, top_size):

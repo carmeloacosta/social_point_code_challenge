@@ -58,7 +58,6 @@ class Client():
         :return: (bool) True if the modification was successfully applied. False otherwise.
         """
         result = True
-        #import ipdb; ipdb.set_trace()  # DEBUGGING
         try:
             operator = modification[0]
             value = int(modification[1:])
