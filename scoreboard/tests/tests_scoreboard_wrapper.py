@@ -1,4 +1,5 @@
 import os
+import sys
 import unittest
 from multiprocessing import Process
 os.path.dirname(os.path.realpath(__file__))
@@ -26,9 +27,18 @@ class TestScoreboardWrapper(unittest.TestCase):
         cls.client = ScoreboardWrapper()
         cls.client.start(CLIENT_MODE)
 
+        # Get rid of deprecation message from pizco
+        #cls._stderr = sys.stderr
+        #cls._stdout = sys.stdout
+        #cls.devnull = open(os.devnull, 'wb')
+        #sys.stderr = sys.stdout = cls.devnull
+
     @classmethod
     def tearDownClass(cls):
         cls.server.terminate()
+        #sys.stderr = cls._stderr
+        #sys.stderr = cls._stdout
+        #cls.devnull.close()
 
     def setUp(self):
         self.client.reset()
