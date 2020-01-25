@@ -4,6 +4,7 @@
     Scoreboard module. Contains all information regarding with a scoreboard that keeps the ranking of all clients
 """
 
+from json import loads
 from bintrees import FastAVLTree
 
 import os
@@ -14,9 +15,13 @@ os.environ['PATH'] += ':'+path
 from client import Client
 
 
-class ScoreBoard():
+class Scoreboard():
     """
-        Keeps Scoreboard info
+        Keeps Scoreboard info and allows highly efficient checks.
+
+        On the one hand, keeps a hash table (dict) to the updated information of each client.
+        On the other hand, keeps a lookup accelerator that allows to retrieve client score sorting with logaritmic
+         complexity (O(log N)).
     """
     def __init__(self):
         # Clients that have reported score
@@ -33,6 +38,30 @@ class ScoreBoard():
         # Allows to access sorted info in O(log(N))
         self.sorted_clients = FastAVLTree()
 
+    def reset(self):
+        """
+            Resets all info.
+
+        :return: None
+        """
+        self.clients = {}
+        self.sorted_clients = FastAVLTree()
+
+    def get(self, client_id):
+        """
+            Returns the current score of the specified client.
+
+        :param client_id: (int) The id of the client.
+        :return: (int) The current score. None if not found.
+        """
+        try:
+            result = self.clients[client_id]
+        except KeyError:
+            result = None
+
+        #print("\n\n\n SERVER GETTING: {}".format(result))  # DEBUGGING
+        return result
+
     def update(self, client_info):
         """
             Modifies the client total score.
@@ -44,6 +73,7 @@ class ScoreBoard():
                             {"user": 123, "total": 250}
                             {"user": 456, "score": "+10"}
                             {"user": 789, "score": "-20"}
+
         :return: (bool) True if successfully updated; False otherwise.
         """
         #import ipdb; ipdb.set_trace() #DEBUGGING
@@ -90,6 +120,7 @@ class ScoreBoard():
             # Invalid client_info
             result = False
 
+        #print("\n\n\n SERVER UPDATE RESULT: {}".format(result))  # DEBUGGING
         return result
 
     def top(self, top_size):

@@ -5,7 +5,7 @@ os.path.dirname(os.path.realpath(__file__))
 path = os.path.dirname(os.path.realpath(__file__))
 os.environ['PATH'] += ':'+path
 
-from scoreboard import ScoreBoard
+from scoreboard import Scoreboard
 
 
 class TestScoreboard(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestScoreboard(unittest.TestCase):
     def test_scoreboard_creation_ok(self):
 
         # Test main
-        scoreboard = ScoreBoard()
+        scoreboard = Scoreboard()
 
         # Check results
         self.assertEqual(len(scoreboard.clients), 0)
@@ -30,7 +30,7 @@ class TestScoreboard(unittest.TestCase):
                       ]
 
         # Test main
-        scoreboard = ScoreBoard()
+        scoreboard = Scoreboard()
 
         for new_total in total_list:
             scoreboard.update(new_total)
@@ -56,7 +56,7 @@ class TestScoreboard(unittest.TestCase):
         self.assertEqual(len(relative_list), len(expected_total))
 
         # Test main
-        scoreboard = ScoreBoard()
+        scoreboard = Scoreboard()
 
         for ptr, new_relative in enumerate(relative_list):
             scoreboard.update(new_relative)
@@ -78,7 +78,7 @@ class TestScoreboard(unittest.TestCase):
                          ]
 
         # Test main
-        scoreboard = ScoreBoard()
+        scoreboard = Scoreboard()
 
         for new_relative in relative_list:
 
@@ -95,7 +95,7 @@ class TestScoreboard(unittest.TestCase):
         self.assertEqual(len(client_id_list), len(client_score_list))
         self.assertEqual(len(client_score_list), len(expected_sorted_id_list))
 
-        scoreboard = ScoreBoard()
+        scoreboard = Scoreboard()
         for ptr in range(len(client_id_list)):
             scoreboard.update({"user": client_id_list[ptr], "total": client_score_list[ptr]})
 
@@ -116,7 +116,7 @@ class TestScoreboard(unittest.TestCase):
         self.assertEqual(len(client_id_list), len(client_score_list))
         self.assertEqual(len(client_score_list), len(expected_sorted_id_list))
 
-        scoreboard = ScoreBoard()
+        scoreboard = Scoreboard()
         for ptr in range(len(client_id_list)):
             scoreboard.update({"user": client_id_list[ptr], "total": client_score_list[ptr]})
 
@@ -176,7 +176,7 @@ class TestScoreboard(unittest.TestCase):
 
             self.assertEqual(len(position_ptr_list), expected_result_size)
 
-            scoreboard = ScoreBoard()
+            scoreboard = Scoreboard()
             for ptr in range(len(client_id_list)):
                 scoreboard.update({"user": client_id_list[ptr], "total": client_score_list[ptr]})
 

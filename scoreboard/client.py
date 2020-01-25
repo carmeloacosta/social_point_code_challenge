@@ -19,6 +19,9 @@ class Client():
     def __repr__(self):
         return "(id: {}, score: {})".format(self.id, self.score)
 
+    def to_json(self):
+        return {"user": self.id, "total": self.score}
+
     def total(self, score):
         """
             Modifies the client total score
