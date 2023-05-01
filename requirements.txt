@@ -1,4 +1,4 @@
 bintrees==2.1.0
 pizco==0.1
-flask==1.1.1
+flask==2.3.2
 pyzmq==18.1.1
